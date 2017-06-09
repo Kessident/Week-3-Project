@@ -1,6 +1,3 @@
-// TODO: Operators chosen immediately after another
-// TODO: Operators on Finihsed Numbers
-
 const nineButton = document.getElementById("9");
 const eightButton = document.getElementById("8");
 const sevenButton = document.getElementById("7");
@@ -36,6 +33,9 @@ for (let i = 0; i < buttonList.length; i++) {
 
 function onClick(event) {
   let btn = event.target;
+
+
+  //Resets calculator state
   if (finished && btn.id !== "="){
     numbersDisplay.innerHTML = "";
     numbersList = [];
@@ -50,22 +50,30 @@ function onClick(event) {
   }
 
 
+  if (numbersDisplay.innerHTML.length > 13 && btn.id !="clear")
+  {return event;}
+
   //Clear Button
   if (btn.id === "clear"){
     numbersDisplay.innerHTML = "";
     numbersList = [];
     operatorsList = [];
     currentNum = "";
+    allowOperator = false;
   }
 
-
   //Equals Button
-  else if (btn.id === "=" && numbersList.length >0){
+  else if (btn.id === "=" && numbersList.length > 0 && allowOperator){
+    console.log("help");
+    console.log(allowOperator);
     numbersList.push(currentNum);
 
 
     for (let i = 0; i < numbersList.length; i++){
       numbersList[i] = parseFloat(numbersList[i]);
+      if (!numbersList[i]){
+        numbersList.splice(i,1);
+      }
     }
 
     while (operatorsList.indexOf("*") > -1 || operatorsList.indexOf("/") > -1){
@@ -76,7 +84,6 @@ function onClick(event) {
 
 
       if (indexMul > -1 && (indexMul <= indexDiv || indexDiv)){
-        console.log("First If");
         let i = indexMul;
         numbersList[i] *= numbersList[i+1];
 
@@ -86,10 +93,8 @@ function onClick(event) {
         }
         numbersList.splice(i+1,1);
         operatorsList.splice(i,1);
-        console.log("operatorsList: " + operatorsList);
       }
       else if (indexDiv > -1 && (indexDiv <= indexMul || indexMul)){
-        console.log("Second If");
         let i = indexDiv;
         numbersList[i] /= numbersList[i+1];
         if (numbersList[i].toString().length > 5){
@@ -97,7 +102,6 @@ function onClick(event) {
         }
         numbersList.splice(i+1,1);
         operatorsList.splice(i,1);
-        console.log("operatorsList: " + operatorsList);
       }
     }
 
@@ -130,6 +134,10 @@ function onClick(event) {
       operatorsList.push(btn.id);
       numbersDisplay.innerHTML += btn.id;
       allowOperator = false;
+    }
+    else if(operatorsList){
+      operatorsList[operatorsList.length-1] = btn.id;
+      numbersDisplay.innerHTML = numbersDisplay.innerHTML.slice(0,-1) + btn.id;
     }
   }
 

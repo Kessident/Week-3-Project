@@ -33,6 +33,10 @@ Light Green: #82c276
   background-color: #82c276;
 }
 
+.equals{
+background-color: #61b34f;
+}
+
 .operator:hover, .number{
   color: white;
 }
@@ -45,4 +49,12 @@ Light Green: #82c276
   flex-grow: 1;
   justify-content: flex-end;
   font-size: 5vw;
+}
+
+#mod{
+  font-size: 2rem;
+}
+
+#sqrt{
+  font-size: 2rem;
 }
