@@ -1,4 +1,5 @@
 // TODO: Operators chosen immediately after another
+// TODO: Operators on Finihsed Numbers
 
 const nineButton = document.getElementById("9");
 const eightButton = document.getElementById("8");
@@ -19,6 +20,7 @@ const additionButton = document.getElementById("+");
 const clearButton = document.getElementById("clear");
 const numbersDisplay = document.getElementById("numbersDisplay");
 
+let operatorChosen = false;
 let finished = false;
 let buttonList = document.querySelectorAll(".square");
 let numbersList = [];
@@ -42,6 +44,13 @@ function onClick(event) {
     finished = false;
   }
 
+  //
+  if (!btn.classList.contains("operator")){
+    operatorChosen = false;
+  }
+
+
+  //Clear Button
   if (btn.id === "clear"){
     numbersDisplay.innerHTML = "";
     numbersList = [];
@@ -49,9 +58,10 @@ function onClick(event) {
     currentNum = "";
   }
 
+
+  //Equals Button
   else if (btn.id === "=" && numbersList.length >0){
     numbersList.push(currentNum);
-    console.log("operatorsList: " + operatorsList);
 
 
     for (let i = 0; i < numbersList.length; i++){
@@ -59,25 +69,20 @@ function onClick(event) {
     }
 
     while (operatorsList.indexOf("*") > -1 || operatorsList.indexOf("/") > -1){
-      console.log("while");
 
       if (operatorsList.indexOf("*") > -1){
         let i = operatorsList.indexOf("*");
         numbersList[i] *= numbersList[i+1];
         numbersList[i] = numbersList[i].toFixed(5);
         numbersList.splice(i+1,1);
-        console.log("operatorsList: " + operatorsList);
         operatorsList.splice(i,1);
-        console.log("spliced operatorsList " + operatorsList);
       }
       else if (operatorsList.indexOf("/") > -1){
         let i = operatorsList.indexOf("/");
         numbersList[i] /= numbersList[i+1];
         numbersList[i] = numbersList[i].toFixed(5);
         numbersList.splice(i+1,1);
-        console.log("operatorsList: " + operatorsList);
         operatorsList.splice(i,1);
-        console.log("spliced operatorsList " + operatorsList);
       }
     }
 
@@ -96,45 +101,24 @@ function onClick(event) {
         i--;
       }
     }
-
-
-
-
-    // for (let i = 0; i < operatorsList.length; i++){
-    //   //sum += parseInt(numbersList[i]);
-    //
-    //   if (oper === "+"){
-    //     sum += parseInt(numbersList[i+1]);
-    //     console.log(sum);
-    //   }
-    //   else if (oper === "-") {
-    //     sum -= parseInt(numbersList[i+1]);
-    //   }
-    //   else if (oper === "/") {
-    //     sum /= parseInt(numbersList[i+1]);
-    //   }
-    //   else if (oper === "*") {
-    //     sum *= parseInt(numbersList[i+1]);
-    //   }
-    // }
-    // console.log("Final sum: " + numbersList[0]);
     numbersDisplay.innerHTML = numbersList[0];
     finished = true;
     currentNum = "";
   }
 
-  else if (btn.classList.contains("operator")){
+
+  //Operator Button
+  else if (btn.classList.contains("operator") && !operatorChosen){
     numbersList.push(currentNum);
     currentNum = "";
     operatorsList.push(btn.id);
     numbersDisplay.innerHTML += btn.id;
+    operatorChosen = true;
   }
 
+  //Number Button
   else if (btn.id !== "="){
     currentNum += btn.id;
     numbersDisplay.innerHTML += btn.id;
   }
-  console.log("\n");
-  console.log("NumbersList: " + numbersList);
-  console.log("OperatorsList: " + operatorsList);
 }
