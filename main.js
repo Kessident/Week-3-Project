@@ -20,7 +20,7 @@ const additionButton = document.getElementById("+");
 const clearButton = document.getElementById("clear");
 const numbersDisplay = document.getElementById("numbersDisplay");
 
-let operatorChosen = false;
+let allowOperator = false;
 let finished = false;
 let buttonList = document.querySelectorAll(".square");
 let numbersList = [];
@@ -46,7 +46,7 @@ function onClick(event) {
 
   //
   if (!btn.classList.contains("operator")){
-    operatorChosen = false;
+    allowOperator = true;
   }
 
 
@@ -69,20 +69,35 @@ function onClick(event) {
     }
 
     while (operatorsList.indexOf("*") > -1 || operatorsList.indexOf("/") > -1){
+      let indexMul = operatorsList.indexOf("*");
+      let indexDiv = operatorsList.indexOf("/");
+      let mulExist = indexMul > -1;
+      let divExist = indexDiv > -1
 
-      if (operatorsList.indexOf("*") > -1){
-        let i = operatorsList.indexOf("*");
+
+      if (indexMul > -1 && (indexMul <= indexDiv || indexDiv)){
+        console.log("First If");
+        let i = indexMul;
         numbersList[i] *= numbersList[i+1];
-        numbersList[i] = numbersList[i].toFixed(5);
+
+
+        if (numbersList[i].toString().length > 5){
+          numbersList[i] = numbersList[i].toFixed(5);
+        }
         numbersList.splice(i+1,1);
         operatorsList.splice(i,1);
+        console.log("operatorsList: " + operatorsList);
       }
-      else if (operatorsList.indexOf("/") > -1){
-        let i = operatorsList.indexOf("/");
+      else if (indexDiv > -1 && (indexDiv <= indexMul || indexMul)){
+        console.log("Second If");
+        let i = indexDiv;
         numbersList[i] /= numbersList[i+1];
-        numbersList[i] = numbersList[i].toFixed(5);
+        if (numbersList[i].toString().length > 5){
+          numbersList[i] = numbersList[i].toFixed(5);
+        }
         numbersList.splice(i+1,1);
         operatorsList.splice(i,1);
+        console.log("operatorsList: " + operatorsList);
       }
     }
 
@@ -108,13 +123,18 @@ function onClick(event) {
 
 
   //Operator Button
-  else if (btn.classList.contains("operator") && !operatorChosen){
-    numbersList.push(currentNum);
-    currentNum = "";
-    operatorsList.push(btn.id);
-    numbersDisplay.innerHTML += btn.id;
-    operatorChosen = true;
+  else if (btn.classList.contains("operator")){
+    if (allowOperator){
+      numbersList.push(currentNum);
+      currentNum = "";
+      operatorsList.push(btn.id);
+      numbersDisplay.innerHTML += btn.id;
+      allowOperator = false;
+    }
   }
+
+
+  else if (btn.id === "numbersDisplay") {}
 
   //Number Button
   else if (btn.id !== "="){

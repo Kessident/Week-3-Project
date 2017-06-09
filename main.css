@@ -37,11 +37,12 @@ Light Green: #82c276
   color: white;
 }
 
-#clear:hover, #equals:hover{
+#clear:hover, .equals:hover{
   background-color: #82c276;
 }
 
 #numbersDisplay{
   flex-grow: 1;
   justify-content: flex-end;
+  font-size: 5vw;
 }
