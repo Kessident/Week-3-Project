@@ -54,6 +54,7 @@ function onClick(event) {
   if (numbersDisplay.innerHTML.length > 13 && (btn.id !="clear" && btn.id !="="))
   {return event;}
 
+
   //Clear Button
   if (btn.id === "clear"){
     numbersDisplay.innerHTML = "";
@@ -64,20 +65,30 @@ function onClick(event) {
   }
 
   //Equals Button
-  else if ((btn.id === "=" || btn.id === "√")  && allowOperator){
+  else if ((btn.id === "=" || btn.id === "√")){
+
     if (currentNum != ""){
       numbersList.push(currentNum);
     }
-
     if (btn.id === "√"){
       operatorsList.push("√");
     }
 
+    if (numbersList.length === operatorsList.length){
+      numbersDisplay.innerHTML = "Invalid Input ";
+      numbersList = [];
+      operatorsList = [];
+      currentNum = "";
+      allowOperator = false;
+      finished = true;
+      return event;
+    }
+
     for (let i = 0; i < numbersList.length; i++){
-      numbersList[i] = parseFloat(numbersList[i]);
-      if (!numbersList[i]){
-        numbersList.splice(i,1);
+      if (numbersList[i] === "."){
+        numbersList[i] = 0;
       }
+      numbersList[i] = parseFloat(numbersList[i]);
     }
 
     //Calculate Multiplication, Division, Modulo
@@ -140,7 +151,6 @@ function onClick(event) {
     currentNum = "";
     allowOperator = false
   }
-
 
   //Operator Button
   else if (btn.classList.contains("operator")){
