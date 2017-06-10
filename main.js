@@ -16,6 +16,8 @@ const subtractionButton = document.getElementById("-");
 const additionButton = document.getElementById("+");
 const clearButton = document.getElementById("clear");
 const numbersDisplay = document.getElementById("numbersDisplay");
+const sqrtButton = document.getElementById("√");
+const modButton = document.getElementById("mod");
 
 let allowOperator = false;
 let finished = false;
@@ -44,13 +46,12 @@ function onClick(event) {
     finished = false;
   }
 
-  //
   if (!btn.classList.contains("operator")){
     allowOperator = true;
   }
 
-
-  if (numbersDisplay.innerHTML.length > 13 && btn.id !="clear")
+  //Caps entered numbers at max of 14
+  if (numbersDisplay.innerHTML.length > 13 && (btn.id !="clear" && btn.id !="="))
   {return event;}
 
   //Clear Button
@@ -63,11 +64,14 @@ function onClick(event) {
   }
 
   //Equals Button
-  else if (btn.id === "=" && numbersList.length > 0 && allowOperator){
-    console.log("help");
-    console.log(allowOperator);
-    numbersList.push(currentNum);
+  else if ((btn.id === "=" || btn.id === "√")  && allowOperator){
+    if (currentNum != ""){
+      numbersList.push(currentNum);
+    }
 
+    if (btn.id === "√"){
+      operatorsList.push("√");
+    }
 
     for (let i = 0; i < numbersList.length; i++){
       numbersList[i] = parseFloat(numbersList[i]);
@@ -76,36 +80,38 @@ function onClick(event) {
       }
     }
 
-    while (operatorsList.indexOf("*") > -1 || operatorsList.indexOf("/") > -1){
-      let indexMul = operatorsList.indexOf("*");
-      let indexDiv = operatorsList.indexOf("/");
-      let mulExist = indexMul > -1;
-      let divExist = indexDiv > -1
-
-
-      if (indexMul > -1 && (indexMul <= indexDiv || indexDiv)){
-        let i = indexMul;
-        numbersList[i] *= numbersList[i+1];
-
-
-        if (numbersList[i].toString().length > 5){
-          numbersList[i] = numbersList[i].toFixed(5);
+    //Calculate Multiplication, Division, Modulo
+      for (let i = 0; i < operatorsList.length; i++){
+        if (operatorsList[i] === "*"){
+          numbersList[i] *= numbersList[i+1];
+          numbersList.splice(i+1,1);
+          operatorsList.splice(i,1);
+          if (numbersList[i].toString().length > 5){
+            numbersList[i] = parseFloat(numbersList[i].toFixed(5));
+          }
+          i--;
         }
-        numbersList.splice(i+1,1);
-        operatorsList.splice(i,1);
-      }
-      else if (indexDiv > -1 && (indexDiv <= indexMul || indexMul)){
-        let i = indexDiv;
-        numbersList[i] /= numbersList[i+1];
-        if (numbersList[i].toString().length > 5){
-          numbersList[i] = numbersList[i].toFixed(5);
+        else if (operatorsList[i] === "/") {
+          numbersList[i] /= numbersList[i+1];
+          numbersList.splice(i+1,1);
+          operatorsList.splice(i,1);
+          if (numbersList[i].toString().length > 5){
+            numbersList[i] = parseFloat(numbersList[i].toFixed(5));
+          }
+          i--;
         }
-        numbersList.splice(i+1,1);
-        operatorsList.splice(i,1);
+        else if (operatorsList[i] === "%"){
+          numbersList[i] %= numbersList[i+1];
+          numbersList.splice(i+1,1);
+          operatorsList.splice(i,1);
+          if (numbersList[i].toString().length > 5){
+            numbersList[i] = parseFloat(numbersList[i].toFixed(5));
+          }
+          i--;
+        }
       }
-    }
 
-
+    //Calculate addition + subtraction
     for (let i = 0; i < operatorsList.length; i++){
       if (operatorsList[i] === "+"){
         numbersList[i] += numbersList[i+1];
@@ -120,9 +126,19 @@ function onClick(event) {
         i--;
       }
     }
+
+
+    if (operatorsList.indexOf("√") > -1){
+      numbersList[0] = Math.sqrt(numbersList[0]);
+      if (numbersList[0].toString().length > 5){
+        numbersList[0] = parseFloat(numbersList[0].toFixed(5));
+      }
+    }
+
     numbersDisplay.innerHTML = numbersList[0];
     finished = true;
     currentNum = "";
+    allowOperator = false
   }
 
 
@@ -135,7 +151,7 @@ function onClick(event) {
       numbersDisplay.innerHTML += btn.id;
       allowOperator = false;
     }
-    else if(operatorsList){
+    else if(operatorsList.length > 0){
       operatorsList[operatorsList.length-1] = btn.id;
       numbersDisplay.innerHTML = numbersDisplay.innerHTML.slice(0,-1) + btn.id;
     }

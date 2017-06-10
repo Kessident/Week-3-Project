@@ -2,14 +2,15 @@
 Main Green: #61b34f
 Light Green: #82c276
 */
-/* TODO: Number Size scalaable */
 
 
 .calculator-container{
   display: flex;
   flex-direction: column;
   height: 60vw;
+  max-height: 648px;
   width: 48vw;
+  max-width: 518.4px;
   outline: black solid 1px;
   background-color: #61b34f;
 }
@@ -26,7 +27,11 @@ Light Green: #82c276
   justify-content: center;
   align-items: center;
   flex-basis: 25%;
-  font-size: 4.5rem;
+  font-size: 7vw;
+}
+
+.empty{
+  flex-grow: 1;
 }
 
 .operator{
@@ -51,10 +56,18 @@ background-color: #61b34f;
   font-size: 5vw;
 }
 
-#mod{
-  font-size: 2rem;
+.modulo, #√{
+  font-size: 3vw;
 }
 
-#sqrt{
-  font-size: 2rem;
+@media screen and (min-width: 1080px) {
+  .square{
+    font-size: 75.6px;
+  }
+  #numbersDisplay{
+    font-size: 54px;
+  }
+  .modulo, #√{
+    font-size: 32.4px;
+  }
 }
