@@ -67,14 +67,12 @@ function onClick(event) {
   //Equals Button
   else if ((btn.id === "=" || btn.id === "√")){
 
-    if (currentNum != ""){
+    if (currentNum !== ""){
       numbersList.push(currentNum);
     }
-    if (btn.id === "√"){
-      operatorsList.push("√");
-    }
 
-    if (numbersList.length === operatorsList.length){
+
+    if (numbersList.length === operatorsList.length ){
       numbersDisplay.innerHTML = "Invalid Input ";
       numbersList = [];
       operatorsList = [];
@@ -82,6 +80,10 @@ function onClick(event) {
       allowOperator = false;
       finished = true;
       return event;
+    }
+
+    if (btn.id === "√"){
+      operatorsList.push("√");
     }
 
     for (let i = 0; i < numbersList.length; i++){
@@ -92,35 +94,35 @@ function onClick(event) {
     }
 
     //Calculate Multiplication, Division, Modulo
-      for (let i = 0; i < operatorsList.length; i++){
-        if (operatorsList[i] === "*"){
-          numbersList[i] *= numbersList[i+1];
-          numbersList.splice(i+1,1);
-          operatorsList.splice(i,1);
-          if (numbersList[i].toString().length > 5){
-            numbersList[i] = parseFloat(numbersList[i].toFixed(5));
-          }
-          i--;
+    for (let i = 0; i < operatorsList.length; i++){
+      if (operatorsList[i] === "*"){
+        numbersList[i] *= numbersList[i+1];
+        numbersList.splice(i+1,1);
+        operatorsList.splice(i,1);
+        if (numbersList[i].toString().length > 5){
+          numbersList[i] = parseFloat(numbersList[i].toFixed(5));
         }
-        else if (operatorsList[i] === "/") {
-          numbersList[i] /= numbersList[i+1];
-          numbersList.splice(i+1,1);
-          operatorsList.splice(i,1);
-          if (numbersList[i].toString().length > 5){
-            numbersList[i] = parseFloat(numbersList[i].toFixed(5));
-          }
-          i--;
-        }
-        else if (operatorsList[i] === "%"){
-          numbersList[i] %= numbersList[i+1];
-          numbersList.splice(i+1,1);
-          operatorsList.splice(i,1);
-          if (numbersList[i].toString().length > 5){
-            numbersList[i] = parseFloat(numbersList[i].toFixed(5));
-          }
-          i--;
-        }
+        i--;
       }
+      else if (operatorsList[i] === "/") {
+        numbersList[i] /= numbersList[i+1];
+        numbersList.splice(i+1,1);
+        operatorsList.splice(i,1);
+        if (numbersList[i].toString().length > 5){
+          numbersList[i] = parseFloat(numbersList[i].toFixed(5));
+        }
+        i--;
+      }
+      else if (operatorsList[i] === "%"){
+        numbersList[i] %= numbersList[i+1];
+        numbersList.splice(i+1,1);
+        operatorsList.splice(i,1);
+        if (numbersList[i].toString().length > 5){
+          numbersList[i] = parseFloat(numbersList[i].toFixed(5));
+        }
+        i--;
+      }
+    }
 
     //Calculate addition + subtraction
     for (let i = 0; i < operatorsList.length; i++){
@@ -149,7 +151,7 @@ function onClick(event) {
     numbersDisplay.innerHTML = numbersList[0];
     finished = true;
     currentNum = "";
-    allowOperator = false
+    allowOperator = false;
   }
 
   //Operator Button
